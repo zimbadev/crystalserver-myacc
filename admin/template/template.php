@@ -71,7 +71,8 @@ defined('MYAAC') or die('Direct access not allowed!'); ?>
 
                 $menus = array(
                     'Crystal Server' => array(
-                        'Add Tibia Coins' => 'addcoins',
+                        'Add Account Coins' => 'add_account_coins',
+                        'Add Player Coins' => 'add_player_coins',
                     ),
                     'Dashboard' => 'dashboard',
                     'News' => 'news',

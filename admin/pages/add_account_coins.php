@@ -1,6 +1,6 @@
 <?php global $db, $account_logged;
 /**
- * Add Tibia Coins
+ * Add Account Coins
  *
  * @package   MyAAC
  * @author    João Paulo (Tryller/jprzimba)
@@ -9,7 +9,7 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'Add Tibia Coins';
-$base = BASE_URL . 'admin/?p=addcoins';
+$base = BASE_URL . 'admin/?p=add_account_coins';
 
 function echo_success($message)
 {
@@ -51,7 +51,7 @@ if (isset($_POST['add_coins']) && $account_logged->isSuperAdmin()) {
     <div class="col-12 col-md-8">
         <div class="box box-primary">
             <div class="box-header with-border">
-                <h3 class="box-title">Add Tibia Coins to Accounts</h3><br>
+                <h3 class="box-title">Add Tibia Coins to ALL Accounts</h3><br>
                 <span>How many coins do you want to add?</span>
                 <?php if (count($accounts) > 0 && $account_logged->isSuperAdmin()) { ?>
                     <div class="box mt-4">
