@@ -1,4 +1,21 @@
 <?php
+
+/** 
+ * Instructions:
+ * - Create v2 and v3 recaptcha keys
+ * - Set the keys in config.php
+ * - Set domain in config.php
+ * - Enable Rook Sample on character_samples in config.php
+ * - The first character town ID in the list will be used for new characters (usally Rookgaard)
+ * ---- Client Configuration ------
+ * ---- Edit those values in your client (/conf/config.ini)
+ * accountCreationClientServices=https://{your-domain}.com/account.php
+ * accountCreationClientServicesRecaptchaV2Content=https://{your-domain}.com/recaptcha_v2_content.php
+ * accountCreationClientServicesRecaptchaV3Content=https://{your-domain}.com/recaptcha_v3_content.php
+ * --------------------------------
+ * Author: <git@rodolfoaugusto | Discord: rrodi>
+ * 
+ */
 global $config, $db, $template_path, $logged, $status, $content, $hooks, $twig_loader, $title;
 
 require_once('common.php');
