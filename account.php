@@ -70,6 +70,10 @@ function verifyRecaptcha(string $token, string $secret, ?string $expectedAction 
     }
 }
 
+if (!$config['client_account_creation_enabled']) {
+    echo errorResponse('Account creation is disabled on this server.', 100);
+    return;
+}
 
 try {
     switch ($actionType) {

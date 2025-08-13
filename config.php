@@ -152,9 +152,11 @@ $config = array(
 	'recaptcha_enabled' => false, // enable recaptcha verification code
 	'recaptcha_site_key' => '', // get your own site and secret keys at https://www.google.com/recaptcha
 	'recaptcha_secret_key' => '', // Recaptcha V2 for web login secret key
+	'recaptcha_theme' => 'light', // light, dark
+
+	'client_account_creation_enabled' => true,
 	'recaptcha2_client_secret_key' => '', // Recaptcha V2 client secret key
 	'recaptcha3_client_secret_key' => '', // Recaptcha V3 client secret key
-	'recaptcha_theme' => 'light', // light, dark
 
 	// e-mail senders
 	'send_mail_when_change_password' => true,	// send e-mail with new password when change password to account
