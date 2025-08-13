@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This is MyAAC's Main Configuration file
  *
@@ -29,6 +30,7 @@ $config = array(
 	 * Recommended: 'prod' cause of speed (page load time is better)
 	 */
 	'env' => 'prod', // 'prod' for production and 'dev' for development
+	'domain' => 'baiaking.com',
 
 	'template' => 'tibiacom', // template used by website (kathrine, tibiacom)
 	'template_allow_change' => false, // allow users to choose their own template while browsing website?
@@ -37,7 +39,7 @@ $config = array(
 
 	// what client version are you using on this OT?
 	// used for the Downloads page and some templates as well
-    'client' => 1500, // 1500 = client 15.00
+	'client' => 1500, // 1500 = client 15.00
 
 	'session_prefix' => 'myaac_', // must be unique for every site on your server
 	'friendly_urls' => false, // mod_rewrite is required for this, it makes links looks more elegant to eye, and also are SEO friendly (example: https://localhost/guilds/Testing instead of https://localhost?subtopic=guilds&name=Testing). Remember to rename .htaccess.dist to .htaccess
@@ -66,7 +68,7 @@ $config = array(
 	// cache system. by default file cache is used
 	'cache_engine' => 'auto', // apc, apcu, eaccelerator, xcache, file, auto, or blank to disable.
 	'cache_prefix' => 'myaac_', // have to be unique if running more MyAAC instances on the same server (except file system cache)
-	
+
 	// database details (leave blank for auto detect from config.lua)
 	'database_host' => '',
 	'database_port' => '', // leave blank to default 3306
@@ -96,38 +98,38 @@ $config = array(
 	'account_create_auto_login' => false, // auto login after creating account?
 	'account_create_character_create' => true, // allow directly to create character on create account page?
 	'account_mail_verify' => false, // force users to confirm their email addresses when registering account
-  'account_verified_only' => false, // force users to confirm their email to login in game
-  'account_mail_confirmed_reward' => [ // reward users for confirming their E-Mails
-      // account_mail_verify needs to be enabled too
-      'premium_days' => 0,
-      'coins_transferable' => 0,
-      'coins' => 0,
-      'message' => 'You received %d %s for confirming your E-Mail address.' // example: You received 20 coins for confirming your E-Mail address.
-  ],
+	'account_verified_only' => false, // force users to confirm their email to login in game
+	'account_mail_confirmed_reward' => [ // reward users for confirming their E-Mails
+		// account_mail_verify needs to be enabled too
+		'premium_days' => 0,
+		'coins_transferable' => 0,
+		'coins' => 0,
+		'message' => 'You received %d %s for confirming your E-Mail address.' // example: You received 20 coins for confirming your E-Mail address.
+	],
 	'account_mail_unique' => true, // email addresses cannot be duplicated? (one account = one email)
 	'account_premium_days' => 0, // default premium days on new account
 	'account_welcome_coins' => 0, // default coins on new account
 	'account_welcome_mail' => false, // send welcome email when user registers
-    'account_welcome_mail_show_pass' => false, // send password in welcome email
+	'account_welcome_mail_show_pass' => false, // send password in welcome email
 	'account_mail_change' => 2, // how many days user need to change email to account - block hackers
 	'account_country' => true, // user will be able to set country of origin when registering account, this information will be viewable in others places aswell
 	'account_country_recognize' => true, // should country of user be automatically recognized by his IP? This makes an external API call to http://ipinfo.io
 
-    'account_coin_type_usage' => 'coins_transferable', // which coin you want to use, coins or coins_transferable to buy changes at site
-    'account_change_character_name' => false, // can user change their character name for coins?
+	'account_coin_type_usage' => 'coins_transferable', // which coin you want to use, coins or coins_transferable to buy changes at site
+	'account_change_character_name' => false, // can user change their character name for coins?
 	'account_change_character_name_coins' => 250, // cost of name change
 	'account_change_character_sex' => false, // can user change their character sex for coins?
 	'account_change_character_sex_coins' => 150, // cost of sex change
-    'account_change_character_main' => true, // can user change their main character for coins?
-    'account_change_character_main_coins' => 250, // cost of main change
+	'account_change_character_main' => true, // can user change their main character for coins?
+	'account_change_character_main_coins' => 250, // cost of main change
 	'characters_per_account' => 10,	// max. number of characters per account
-    'account_update_info_on_register' => true, // let player update your 'Public Information' when register at first time only
+	'account_update_info_on_register' => true, // let player update your 'Public Information' when register at first time only
 
-    // recovery key
-    'recovery_key_length' => 15,                // length of recovery key code
-    'account_show_rk' => false,
-    'generate_new_reckey' => true,				// let player generate new recovery key, he will receive e-mail with new rec key (not display on page, hacker can't generate rec key)
-    'generate_new_reckey_price' => 250,			// coins price for new recovery key
+	// recovery key
+	'recovery_key_length' => 15,                // length of recovery key code
+	'account_show_rk' => false,
+	'generate_new_reckey' => true,				// let player generate new recovery key, he will receive e-mail with new rec key (not display on page, hacker can't generate rec key)
+	'generate_new_reckey_price' => 250,			// coins price for new recovery key
 
 	// mail
 	'mail_enabled' => false, // is aac maker configured to send e-mails?
@@ -149,7 +151,9 @@ $config = array(
 	// reCAPTCHA (prevent spam bots)
 	'recaptcha_enabled' => false, // enable recaptcha verification code
 	'recaptcha_site_key' => '', // get your own site and secret keys at https://www.google.com/recaptcha
-	'recaptcha_secret_key' => '',
+	'recaptcha_secret_key' => '', // Recaptcha V2 for web login secret key
+	'recaptcha2_client_secret_key' => '', // Recaptcha V2 client secret key
+	'recaptcha3_client_secret_key' => '', // Recaptcha V3 client secret key
 	'recaptcha_theme' => 'light', // light, dark
 
 	// e-mail senders
@@ -188,7 +192,7 @@ $config = array(
 	),
 
 
-    'use_character_sample_skills' => false,
+	'use_character_sample_skills' => false,
 
 	// it must show limited number of players after using search in character page
 	'characters_search_limit' => 15,
@@ -281,7 +285,7 @@ $config = array(
 		'Annihilator' => 10102,
 		'Pits Of Inferno' => 52003, // Storage.PitsOfInferno.WeaponReward
 		'Inquisition' => 51127, // Storage.TheInquisition.Reward
-		'Demon Oak' => 51700,// Maybe 51700
+		'Demon Oak' => 51700, // Maybe 51700
 		'SoulWar Quest' => 47223, // Storage.Quest.U12_40.SoulWar.QuestReward
 		'Yalahar Quest' => 51249, // Storage.InServiceofYalahar.DoorToReward
 		//'Some Quest' => 123,
@@ -295,7 +299,7 @@ $config = array(
 	'signature_cache_time' => 5, // how long to store cached file (in minutes), default 5 minutes
 	'signature_browser_cache' => 60, // how long to cache by browser (in minutes), default 1 hour
 
-    'allow_menu_animated' => false, // allow menu with animated gifs
+	'allow_menu_animated' => false, // allow menu with animated gifs
 
 	// news page
 	'news_limit' => 5, // limit of news on the latest news page
@@ -358,7 +362,7 @@ $config = array(
 	'last_kills_limit' => 50, // max. number of deaths shown on the last kills page
 
 	// status, took automatically from config file if empty
-    'status_enabled' => true, // you can disable status checking by settings this to "false"
+	'status_enabled' => true, // you can disable status checking by settings this to "false"
 	'status_ip' => '',
 	'status_port' => '',
 	'status_timeout' => 2, // how long to wait for the initial response from the server (default: 2 seconds)
@@ -381,12 +385,12 @@ $config = array(
 
 	'npc' => [],
 
-    // character name blocked
-    'character_name_blocked' => [
-        'prefix' => [],
-        'names' => [],
-        'words' => [],
-    ],
+	// character name blocked
+	'character_name_blocked' => [
+		'prefix' => [],
+		'names' => [],
+		'words' => [],
+	],
 
-    'enablePagseguroLocal' => false, // set true to enable donate and boxes page on localhost.
+	'enablePagseguroLocal' => false, // set true to enable donate and boxes page on localhost.
 );
