@@ -26,7 +26,7 @@ global $config;
 if (version_compare(phpversion(), '7.4', '<')) die('PHP version 7.4 or higher is required.');
 
 define('MYAAC', true);
-define('MYAAC_VERSION', '0.8.21');
+define('MYAAC_VERSION', '0.8.23');
 define('DATABASE_VERSION', 35);
 define('TABLE_PREFIX', 'myaac_');
 define('START_TIME', microtime(true));
