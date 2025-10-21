@@ -96,7 +96,7 @@ Let us and the Tibia community know what you think! Click on an active poll from
 	}
 
 	if(!$empty_active) {
-		echo '<tr bgcolor="'.$bgcolor.'"><td colspan=2><div style="text-align:center"><i>There are no active polls.</i></div></td></tr>';
+		echo '<tr bgcolor="'.($bgcolor ?? '#D4C0A1').'"><td colspan=2><div style="text-align:center"><i>There are no active polls.</i></div></td></tr>';
 	}
 ?>
 </tbody></table>
