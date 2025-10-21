@@ -85,10 +85,22 @@ switch ($action) {
   case 'createaccountandcharacter':
     $email = mb_strtolower($result->EMail);
     try {
-      if (filter_var($email, FILTER_VALIDATE_EMAIL) && $db->query("SELECT `email` FROM `accounts` WHERE `email` = {$db->quote($email)}")->rowCount() == 0) {
-        $response = json_encode([
-          "Success"   => true,
-          "AccountID" => createAccount([
+      log_append('create_account_service.log', "Attempting to create account with email: " . $email);
+      
+      if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        throw new Exception('Invalid email format');
+      }
+      
+      $emailExists = $db->query("SELECT `email` FROM `accounts` WHERE `email` = {$db->quote($email)}")->rowCount() > 0;
+      if ($emailExists) {
+        throw new Exception('Email already exists');
+      }
+      
+      log_append('create_account_service.log', "Email validation passed, proceeding with account creation");
+      
+      $response = json_encode([
+        "Success"   => true,
+        "AccountID" => createAccount([
             "email"         => $email,
             "password"      => $result->Password,
             "characterName" => stripslashes(ucwords(strtolower($result->CharacterName))),
@@ -101,21 +113,40 @@ switch ($action) {
           // "Password" => $result->Password
         ]);
       } else {
-        throw new Exception('Email invalid!');
+        throw new Exception('Email validation failed');
       }
     } catch (Exception $e) {
-      log_append('create_account_service.log', "Error caught: {$e->getMessage()}");
+      $errorMessage = $e->getMessage();
+      $trace = $e->getTraceAsString();
+      log_append('create_account_service.log', "Error caught: {$errorMessage}\nStack trace:\n{$trace}");
+      
+      header('Content-Type: application/json');
       $response = json_encode([
         "errorCode"             => 101,
-        "errorMessage"          => $e->getMessage(), //"An internal error has occurred. Please try again later!",
+        "errorMessage"          => $errorMessage,
         "Success"               => false,
         "IsRecaptcha2Requested" => false,
       ]);
+      
+      if (json_last_error() !== JSON_ERROR_NONE) {
+        log_append('create_account_service.log', "JSON encode error: " . json_last_error_msg());
+      }
     }
     break;
 }
-log_append('create_account_service.log', "response: $response");
-die($response);
+log_append('create_account_service.log', "Final response: $response");
+
+header('Content-Type: application/json');
+if (!empty($response)) {
+    echo $response;
+} else {
+    echo json_encode([
+        "errorCode" => 500,
+        "errorMessage" => "An unexpected error occurred",
+        "Success" => false
+    ]);
+}
+exit();
 
 /**
  * Function to return server status as array to worlds list
