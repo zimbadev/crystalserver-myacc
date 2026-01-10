@@ -38,7 +38,9 @@ if (!empty($get)) {
 	}
 
 	$dados = $array[$key] ?? null;
-	$dados['vocation'] = implode(', ', $dados['vocation']);
+	$dados['vocation'] = is_array($dados['vocation'] ?? null) 
+    ? implode(', ', $dados['vocation']) 
+    : 'All';
 	$dados['type'] = $dados['type'] == "Spell" ? "Instant" : "Rune";
 	$dados['cooldown'] = $dados['cooldown'] / 1000;
 	$dados['groupCooldown'] = $dados['groupCooldown'] / 1000;
