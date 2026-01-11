@@ -9,17 +9,19 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Bans list';
+$_page = 0;
+$next_page = false;
 
 if(!$config['bans_display_all'])
 	echo 'Last ' . $config['bans_limit'] . ' banishments.<br/><br/>';
 
 if($config['bans_display_all'])
 {
-	$_page = isset($_GET['page']) ? $_GET['page'] : 0;
+	$_page = isset($_GET['page']) ? (int)$_GET['page'] : 0;
 	$offset = $_page * $config['bans_limit'] + 1;
 }
 
-$bans = $db->query('SELECT * FROM ' . $db->tableName('account_bans') . '');
+$bans = $db->query('SELECT * FROM ' . $db->tableName('account_bans') . ' ORDER BY `banned_at` DESC');
 if(!$bans->rowCount())
 {
 ?>
@@ -62,43 +64,69 @@ if(!$bans->rowCount())
 		<td><span style="color: white"><b>Type</b></span></td>
 		<td><span style="color: white"><b>Expires</b></span></td>
 		<td><span style="color: white"><b>Reason</b></span></td>
-		<td><span style="color: white"><b>Comment</b></span></td>
 		<td><span style="color: white"><b>Added by:</b></span></td>
 	</tr>
 <?php
+$i = 0;
 foreach($bans as $ban)
 {
-	if($i++ > 100)
-	{
-		$next_page = true;
-		break;
+	$player_list = array();
+	$samples = array_values($config['character_samples']);
+	$quoted_samples = array_map(array($db, 'quote'), $samples);
+	$samples_list = implode(',', $quoted_samples);
+	
+	$players_query = $db->query("SELECT `name` FROM `players` WHERE `account_id` = " . (int)$ban['account_id'] . " AND `name` NOT IN (" . $samples_list . ") AND `name` NOT LIKE '%Sample%' ORDER BY `level` DESC, `lastlogin` DESC")->fetchAll();
+	
+	if (count($players_query) > 0) {
+		foreach ($players_query as $player_row) {
+			$player_list[] = $player_row['name'];
+		}
+	} else {
+		// fallback to any player if only samples exist
+		$players_query = $db->query("SELECT `name` FROM `players` WHERE `account_id` = " . (int)$ban['account_id'] . " ORDER BY `level` DESC, `lastlogin` DESC")->fetchAll();
+		foreach ($players_query as $player_row) {
+			$player_list[] = $player_row['name'];
+		}
 	}
+
+	if (empty($player_list)) {
+		$player_list[] = 'Account ID: ' . $ban['account_id'];
+	}
+
+	foreach ($player_list as $player_name) {
+		if($i++ > 100)
+		{
+			$next_page = true;
+			break 2;
+		}
 ?>
 	<tr align="center" bgcolor="<?php echo getStyle($i); ?>">
-		<td height="50" width="140"><?php echo getPlayerLink(getPlayerNameByAccount($ban['value'])); ?></td>
-		<td><?php echo getBanType($ban['type']); ?></td>
+		<td height="50" width="140"><?php echo strpos($player_name, 'Account ID:') === 0 ? $player_name : getPlayerLink($player_name); ?></td>
+		<td>Account Banishment</td>
 		<td>
 <?php
-			if($ban['expires'] == "-1")
+			if($ban['expires_at'] == "-1" || $ban['expires_at'] == 0)
 				echo 'Never';
 			else
-				echo date("H:i:s", $ban['expires']) . '<br/>' . date("d M Y", $ban['expires']);
+				echo date("H:i:s", $ban['expires_at']) . '<br/>' . date("d M Y", $ban['expires_at']);
 ?>
 		</td>
 		<td><?php echo getBanReason($ban['reason']); ?></td>
-		<td><?php echo $ban['comment']; ?></td>
 		<td>
 <?php
-			if($ban['admin_id'] == "0")
+			if($ban['banned_by'] == "0")
 				echo 'Autoban';
-			else
-				echo getPlayerLink(getPlayerNameByAccount($ban['admin_id']));
+			else {
+				$admin_name = getPlayerNameByAccount($ban['banned_by']);
+				echo !empty($admin_name) ? getPlayerLink($admin_name) : 'Player ID: ' . $ban['banned_by'];
+			}
 
-			echo '<br/>' . date("d.m.Y", $ban['added']);
+			echo '<br/>' . date("d.m.Y", $ban['banned_at']);
 ?>
 		</td>
 	</tr>
 <?php
+	}
 }
 ?>
 </table>
@@ -112,9 +140,12 @@ if($next_page)
 ?>
 </table>
 <?php
-function getBanReason($reasonId)
+function getBanReason($reason)
 {
-	switch($reasonId)
+	if(!is_numeric($reason))
+		return $reason;
+
+	switch($reason)
 	{
 		case 0:
 			return "Offensive Name";
