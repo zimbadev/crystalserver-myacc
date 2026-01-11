@@ -9,13 +9,15 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Bans list';
+$_page = 0;
+$next_page = false;
 
 if(!$config['bans_display_all'])
 	echo 'Last ' . $config['bans_limit'] . ' banishments.<br/><br/>';
 
 if($config['bans_display_all'])
 {
-	$_page = isset($_GET['page']) ? $_GET['page'] : 0;
+	$_page = isset($_GET['page']) ? (int)$_GET['page'] : 0;
 	$offset = $_page * $config['bans_limit'] + 1;
 }
 
