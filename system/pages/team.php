@@ -47,7 +47,7 @@ foreach ($groupList as $id => $group) {
 
         $lastLogin = 'Never.';
         if ($member->getLastLogin() > 0)
-            $lastLogin = date("j F Y, g:i a", $member->getLastLogin());
+            $lastLogin = date("d/m/Y H:i", $member->getLastLogin());
 
         $members[] = array(
             'group_name' => $group->getName(),
