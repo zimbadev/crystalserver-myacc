@@ -61,7 +61,7 @@ Changed login by email
 ### License
 
 This program and all associated files are released under the GNU Public License.  
-See [LICENSE](https://github.com/jprzimba/crystalserver-aac/blob/main/LICENSE) for details.
+See [LICENSE](https://github.com/zimbadev/crystalserver-aac/blob/main/LICENSE) for details.
 
 ### Credits
 

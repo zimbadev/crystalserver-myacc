@@ -111,8 +111,8 @@ else {
 
 		$query = $db->query("SELECT `id` FROM `" . TABLE_PREFIX ."news` WHERE `title` LIKE 'Hello!';");
 		if($query->rowCount() == 0) {
-			if(query("INSERT INTO `" . TABLE_PREFIX ."news` (`id`, `type`, `date`, `category`, `title`, `body`, `player_id`, `comments`, `hidden`) VALUES (NULL, '1', UNIX_TIMESTAMP(), '2', 'Hello!', 'MyAAC is just READY to use!', " . $player_id . ", 'https://github.com/jprzimba/crystalserver-aac', '0');
-	INSERT INTO `myaac_news` (`id`, `type`, `date`, `category`, `title`, `body`, `player_id`, `comments`, `hidden`) VALUES (NULL, '2', UNIX_TIMESTAMP(), '4', 'Hello tickets!', 'https://github.com/jprzimba/crystalserver-aac', " . $player_id . ", '', '0');")) {
+			if(query("INSERT INTO `" . TABLE_PREFIX ."news` (`id`, `type`, `date`, `category`, `title`, `body`, `player_id`, `comments`, `hidden`) VALUES (NULL, '1', UNIX_TIMESTAMP(), '2', 'Hello!', 'MyAAC is just READY to use!', " . $player_id . ", 'https://github.com/zimbadev/crystalserver-aac', '0');
+	INSERT INTO `myaac_news` (`id`, `type`, `date`, `category`, `title`, `body`, `player_id`, `comments`, `hidden`) VALUES (NULL, '2', UNIX_TIMESTAMP(), '4', 'Hello tickets!', 'https://github.com/zimbadev/crystalserver-aac', " . $player_id . ", '', '0');")) {
 				success($locale['step_database_created_news']);
 			}
 		}

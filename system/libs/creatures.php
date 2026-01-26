@@ -46,7 +46,7 @@ class Creatures {
         }
 
         if (empty(Items::$items)) {
-            error('Fatal error. Please report to https://github.com/jprzimba/crystalserver-aac/issues');
+            error('Fatal error. Please report to https://github.com/zimbadev/crystalserver-aac/issues');
             return false;
         }
         foreach ((array)Items::$items as $id => $item) {
