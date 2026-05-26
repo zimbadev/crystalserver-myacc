@@ -50,13 +50,10 @@ In any case the name must not violate the naming conventions stated in the <a hr
                       <tbody>
                       <tr class="LabelH">
                         <td style="width:50%;"><span>Name<span style="color: red;">*</span></span></td>
-                        <td><span>Sex </span style="color: red;">*</span></span></td>
+                        <td><span>Sex <span style="color: red;">*</span></span></td>
                       </tr>
                       <tr class="Even">
-                        <td><input name="name" id="character_name" value="{{ name }}"
-                                   size="{{ config.character_name_max_length }}"
-                                   maxlength="{{ config.character_name_max_length }}">
-                                   onkeyup="checkName();">
+                        <td><input name="name" id="character_name" value="{{ name }}" size="{{ config.character_name_max_length }}" maxlength="{{ config.character_name_max_length }}" />
                           <img id="character_indicator"
                                src="images/global/general/{% if not save or errors.name is defined %}n{% endif %}ok.gif"/>
                           <br>
