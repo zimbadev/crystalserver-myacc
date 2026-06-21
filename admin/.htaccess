@@ -1,6 +1,5 @@
-order deny,allow
-deny from all
-allow from 127.0.0.1
-# Add your IP below to allow admin access:
-# allow from 192.168.0.0/16
-# allow from 10.0.0.0/8
+# Uncomment the lines below if you want to restrict admin access only to your IP.
+# If you are unsure, leave them commented out.
+#order deny,allow
+#deny from all
+#allow from 127.0.0.1

@@ -1,6 +1,6 @@
 User-agent: *
 Disallow: /admin/
-Disallow: /install/
+# Disallow: /install/  (uncomment in production)
 Disallow: /tools/
 Disallow: /plugins/
 Disallow: /system/
