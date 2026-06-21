@@ -231,7 +231,7 @@ defined('MYAAC') or die('Direct access not allowed!'); ?>
 </div>
 
 <?php }
-if (!$logged && !admin()) {
+if (!$logged || !admin()) {
     echo $content;
 }
 ?>
