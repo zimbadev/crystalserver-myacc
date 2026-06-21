@@ -130,10 +130,10 @@ if(!empty($errors)){
 $status_acpt = '2';
 $status_rej = '4';
 if(isset($_POST['war_acpt']) && !empty($_POST['war_acpt'])){
-	$acpt_war = $db->query('UPDATE guild_wars SET `status` = '.$status_acpt.' WHERE `id` = '.$_POST['war_acpt'].'');
+	$acpt_war = $db->query('UPDATE guild_wars SET `status` = '.$status_acpt.' WHERE `id` = '.(int)$_POST['war_acpt'].'');
 }
 if(isset($_POST['war_rej']) && !empty($_POST['war_rej'])){
-	$acpt_war = $db->query('UPDATE `guild_wars` SET `status` = '.$status_rej.' WHERE `id` = '.$_POST['war_rej'].'');
+	$acpt_war = $db->query('UPDATE `guild_wars` SET `status` = '.$status_rej.' WHERE `id` = '.(int)$_POST['war_rej'].'');
 }
 
 ?>

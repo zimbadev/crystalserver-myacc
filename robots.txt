@@ -1,2 +1,17 @@
 User-agent: *
-Disallow:
+Disallow: /admin/
+Disallow: /install/
+Disallow: /tools/
+Disallow: /plugins/
+Disallow: /system/
+Disallow: /payments/
+Disallow: /images/.htaccess
+Disallow: /config.local.php
+Disallow: /config.php
+Disallow: /.htaccess
+Disallow: /composer.json
+Disallow: /package.json
+Disallow: /CHANGELOG.md
+Disallow: /README.md
+Disallow: /VERSION
+Disallow: /robots.txt

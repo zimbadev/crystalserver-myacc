@@ -41,7 +41,12 @@ if (ACTION === 'logout' && !isset($_REQUEST['account_login'])) {
             unset($account_logged);
 
             if (isset($_REQUEST['redirect'])) {
-                header('Location: ' . urldecode($_REQUEST['redirect']));
+                $redirect = urldecode($_REQUEST['redirect']);
+                $parsed = parse_url($redirect);
+                if (isset($parsed['host']) && $parsed['host'] !== $_SERVER['HTTP_HOST']) {
+                    $redirect = SERVER_URL;
+                }
+                header('Location: ' . $redirect);
                 exit;
             }
         }
@@ -88,7 +93,7 @@ if (ACTION === 'logout' && !isset($_REQUEST['account_login'])) {
             if ($account_logged->isLoaded() && encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $login_password) == $account_logged->getPassword()
                 && (!isset($t) || $t['attempts'] < 5)
             ) {
-                session_regenerate_id();
+                session_regenerate_id(true);
                 setSession('account', $account_logged->getNumber());
                 setSession('password', encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $login_password));
                 if ($remember_me) {

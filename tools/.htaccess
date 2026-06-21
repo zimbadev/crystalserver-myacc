@@ -1,3 +1,14 @@
 <IfModule mod_autoindex.c>
 	Options -Indexes
 </IfModule>
+
+<IfModule mod_headers.c>
+	Header always set X-Frame-Options "SAMEORIGIN"
+	Header always set X-Content-Type-Options "nosniff"
+</IfModule>
+
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	RewriteRule ^validate\.php$ - [L]
+	RewriteRule .* - [R=404,L]
+</IfModule>

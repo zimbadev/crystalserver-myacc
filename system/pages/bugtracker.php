@@ -31,7 +31,7 @@ $showed = $post = $reply = false;
             $bug[1] = $db->query('SELECT * FROM '.$db->tableName(TABLE_PREFIX . 'bugtracker').' where `type` = 1 order by `uid` desc');
 
         if(!empty($_REQUEST['id']) and is_numeric($_REQUEST['id']) and !empty($_REQUEST['acc']) and is_numeric($_REQUEST['acc']))
-            $bug[2] = $db->query('SELECT * FROM '.$db->tableName(TABLE_PREFIX . 'bugtracker').' where `account` = '.$_REQUEST['acc'].' and `id` = '.$_REQUEST['id'].' and `type` = 1')->fetch();
+            $bug[2] = $db->query('SELECT * FROM '.$db->tableName(TABLE_PREFIX . 'bugtracker').' where `account` = '.(int)$_REQUEST['acc'].' and `id` = '.(int)$_REQUEST['id'].' and `type` = 1')->fetch();
 
         if(!empty($_REQUEST['id']) and is_numeric($_REQUEST['id']) and !empty($_REQUEST['acc']) and is_numeric($_REQUEST['acc']))
         {
@@ -66,7 +66,7 @@ $showed = $post = $reply = false;
                 echo '<TR BGCOLOR="'.$light.'"><td colspan=2>'.nl2br(escapeHtml($bug[2]['text'])).'</td></tr>';
                 echo '</TABLE>';
 
-                $answers = $db->query('SELECT * FROM '.$db->tableName(TABLE_PREFIX . 'bugtracker').' where `account` = '.$_REQUEST['acc'].' and `id` = '.$_REQUEST['id'].' and `type` = 2 order by `reply`');
+                $answers = $db->query('SELECT * FROM '.$db->tableName(TABLE_PREFIX . 'bugtracker').' where `account` = '.(int)$_REQUEST['acc'].' and `id` = '.(int)$_REQUEST['id'].' and `type` = 2 order by `reply`');
                 foreach($answers as $answer)
                 {
                     if($answer['who'] == 1)
@@ -87,9 +87,9 @@ $showed = $post = $reply = false;
             {
                 if($bug[2]['status'] != 3)
                 {
-                    $reply = $db->query('SELECT MAX(reply) FROM `' . TABLE_PREFIX . 'bugtracker` where `account` = '.$_REQUEST['acc'].' and `id` = '.$_REQUEST['id'].' and `type` = 2')->fetch();
+                    $reply = $db->query('SELECT MAX(reply) FROM `' . TABLE_PREFIX . 'bugtracker` where `account` = '.(int)$_REQUEST['acc'].' and `id` = '.(int)$_REQUEST['id'].' and `type` = 2')->fetch();
                     $reply = $reply[0] + 1;
-                    $iswho = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'bugtracker` where `account` = '.$_REQUEST['acc'].' and `id` = '.$_REQUEST['id'].' and `type` = 2 order by `reply` desc limit 1')->fetch();
+                    $iswho = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'bugtracker` where `account` = '.(int)$_REQUEST['acc'].' and `id` = '.(int)$_REQUEST['id'].' and `type` = 2 order by `reply` desc limit 1')->fetch();
 
                     if(isset($_POST['finish']))
                     {
@@ -109,7 +109,7 @@ $showed = $post = $reply = false;
                         {
                             $type = 2;
                             $INSERT = $db->query('INSERT INTO `' . TABLE_PREFIX . 'bugtracker` (`account`,`id`,`text`,`reply`,`type`, `who`) VALUES ('.$db->quote($_REQUEST['acc']).','.$db->quote($_REQUEST['id']).','.$db->quote($_POST['text']).','.$db->quote($reply).','.$db->quote($type).','.$db->quote(1).')');
-                            $UPDATE = $db->query('UPDATE `' . TABLE_PREFIX . 'bugtracker` SET `status` = '.$_POST['status'].' where `account` = '.$_REQUEST['acc'].' and `id` = '.$_REQUEST['id'].'');
+                            $UPDATE = $db->query('UPDATE `' . TABLE_PREFIX . 'bugtracker` SET `status` = '.(int)$_POST['status'].' where `account` = '.(int)$_REQUEST['acc'].' and `id` = '.(int)$_REQUEST['id'].'');
                             header('Location: ?subtopic=bugtracker&control=true&id='.$_REQUEST['id'].'&acc='.$_REQUEST['acc'].'');
                         }
                     }
@@ -155,13 +155,13 @@ $showed = $post = $reply = false;
         }
 
         if(!empty($_REQUEST['id']))
-            $id = addslashes(htmlspecialchars(trim($_REQUEST['id'])));
+            $id = (int)$_REQUEST['id'];
 
         if(empty($_REQUEST['id']))
             $bug[1] = $db->query('SELECT * FROM '.$db->tableName(TABLE_PREFIX . 'bugtracker').' where `account` = '.$account_logged->getId().' and `type` = 1 order by `id` desc');
 
         if(!empty($_REQUEST['id']) and is_numeric($_REQUEST['id']))
-            $bug[2] = $db->query('SELECT * FROM '.$db->tableName(TABLE_PREFIX . 'bugtracker').' where `account` = '.$account_logged->getId().' and `id` = '.$id.' and `type` = 1')->fetch();
+            $bug[2] = $db->query('SELECT * FROM '.$db->tableName(TABLE_PREFIX . 'bugtracker').' where `account` = '.(int)$account_logged->getId().' and `id` = '.(int)$id.' and `type` = 1')->fetch();
         else
             $bug[2] = NULL;
 
@@ -185,7 +185,7 @@ $showed = $post = $reply = false;
                 echo '<TR BGCOLOR="'.$dark.'"><td colspan=2>'.nl2br(escapeHtml($bug[2]['text'])).'</td></tr>';
                 echo '</TABLE>';
 
-                $answers = $db->query('SELECT * FROM '.$db->tableName('myaac_bugtracker').' where `account` = '.$account_logged->getId().' and `id` = '.$id.' and `type` = 2 order by `reply`');
+                $answers = $db->query('SELECT * FROM '.$db->tableName('myaac_bugtracker').' where `account` = '.(int)$account_logged->getId().' and `id` = '.(int)$id.' and `type` = 2 order by `reply`');
                 foreach($answers as $answer)
                 {
                     if($answer['who'] == 1)
@@ -206,9 +206,9 @@ $showed = $post = $reply = false;
             {
                 if($bug[2]['status'] != 3)
                 {
-                    $reply = $db->query('SELECT MAX(reply) FROM `' . TABLE_PREFIX . 'bugtracker` where `account` = '.$acc.' and `id` = '.$id.' and `type` = 2')->fetch();
+                    $reply = $db->query('SELECT MAX(reply) FROM `' . TABLE_PREFIX . 'bugtracker` where `account` = '.(int)$acc.' and `id` = '.(int)$id.' and `type` = 2')->fetch();
                     $reply = $reply[0] + 1;
-                    $iswho = $db->query('SELECT * FROM `myaac_bugtracker` where `account` = '.$acc.' and `id` = '.$id.' and `type` = 2 order by `reply` desc limit 1')->fetch();
+                    $iswho = $db->query('SELECT * FROM `myaac_bugtracker` where `account` = '.(int)$acc.' and `id` = '.(int)$id.' and `type` = 2 order by `reply` desc limit 1')->fetch();
 
                     if(isset($_POST['finish']))
                     {
@@ -228,7 +228,7 @@ $showed = $post = $reply = false;
                         {
                             $type = 2;
                             $INSERT = $db->query('INSERT INTO `myaac_bugtracker` (`account`,`id`,`text`,`reply`,`type`) VALUES ('.$db->quote($acc).','.$db->quote($id).','.$db->quote($_POST['text']).','.$db->quote($reply).','.$db->quote($type).')');
-                            $UPDATE = $db->query('UPDATE `myaac_bugtracker` SET `status` = 1 where `account` = '.$acc.' and `id` = '.$id.'');
+                            $UPDATE = $db->query('UPDATE `myaac_bugtracker` SET `status` = 1 where `account` = '.(int)$acc.' and `id` = '.(int)$id.'');
                             header('Location: ?subtopic=bugtracker&id='.$id.'');
                         }
                     }

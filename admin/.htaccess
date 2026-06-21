@@ -1,4 +1,6 @@
-# uncomment if you want to restrict access only for your ip
-#order deny,allow
-#deny from all
-#allow from 127.0.0.1
+order deny,allow
+deny from all
+allow from 127.0.0.1
+# Add your IP below to allow admin access:
+# allow from 192.168.0.0/16
+# allow from 10.0.0.0/8

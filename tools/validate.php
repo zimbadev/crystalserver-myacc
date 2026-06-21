@@ -69,9 +69,9 @@ if (isset($_GET['account'])) {
   }
 
   success_('Good. Your name will be:<br /><b>' . ucwords($name) . '</b>');
-} elseif (isset($_GET['password']) && isset($_GET['password2'])) {
-  $password = $_GET['password'];
-  $password2 = $_GET['password2'];
+} elseif (isset($_POST['password']) && isset($_POST['password2'])) {
+  $password = $_POST['password'];
+  $password2 = $_POST['password2'];
 
   if (!isset($password[0])) {
     error_('Please enter the password for your new account.');

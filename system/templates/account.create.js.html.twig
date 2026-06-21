@@ -204,8 +204,8 @@
 
 		var password = document.getElementById("password").value;
 		var password2 = document.getElementById("password2").value;
-		$.getJSON("tools/validate.php", { password: password, password2: password2, uid: Math.random() },
-			function(data){
+		$.ajax({ type: "POST", url: "tools/validate.php", data: { password: password, password2: password2, uid: Math.random() }, dataType: "json",
+			success: function(data){
 				if(data.hasOwnProperty('success')) {
 					$('#password_error').html ('');
 					$('#password2_error').html ('');
@@ -222,7 +222,7 @@
 				$('#password_indicator').show();
 				$('#password2_indicator').show();
 			}
-		);
+		});
 
 		lastSend = timeNow;
 	}

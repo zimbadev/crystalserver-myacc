@@ -26,7 +26,7 @@ global $config;
 if (version_compare(phpversion(), '7.4', '<')) die('PHP version 7.4 or higher is required.');
 
 define('MYAAC', true);
-define('MYAAC_VERSION', '0.8.29');
+define('MYAAC_VERSION', '0.8.30');
 define('DATABASE_VERSION', 35);
 define('TABLE_PREFIX', 'myaac_');
 define('START_TIME', microtime(true));
@@ -89,7 +89,9 @@ define('TFS_LAST', TFS_03);
 if (!IS_CLI) {
     session_save_path(SYSTEM . 'php_sessions');
     session_set_cookie_params([
-        "httponly" => true
+        "httponly" => true,
+        "secure" => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443,
+        "samesite" => "Lax"
     ]);
     session_start();
 }
