@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.8.30 - 21.06.2026]
+
+### Security
+* Major security audit and fixes across the codebase.
+* Fixed 11 SQL injection vulnerabilities in currentcharactertrades, guildwars, polls, bugtracker, modifiers, and forum pages.
+* Fixed reflected XSS in 404 error page.
+* Fixed open redirect vulnerability in logout flow.
+* Added SameSite and Secure flags to session cookies.
+* Changed session_regenerate_id to delete old session files.
+* Fixed admin template to properly show login page for non-admin logged-in users.
+
+### Changed
+* Updated MyAAC version from 0.8.29 to 0.8.30.
+* Password validation now uses POST instead of GET to avoid exposure in server logs.
+
+### Removed
+* Removed install/ directory from production to prevent re-installation attacks.
+
 ## [0.8.16 - 14.02.2024]
 
 ### Fixed
