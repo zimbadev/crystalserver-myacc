@@ -9,6 +9,10 @@
 
 <IfModule mod_rewrite.c>
 	RewriteEngine On
+	# Allow validate.php for AJAX
 	RewriteRule ^validate\.php$ - [L]
+	# Allow static assets (css, js, fonts, images)
+	RewriteRule ^(css|js|fonts)/ - [L]
+	# Block everything else
 	RewriteRule .* - [R=404,L]
 </IfModule>
