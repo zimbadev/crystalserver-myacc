@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.8.30 - 22.06.2026]
+
+### Fixed
+* **CRITICAL:** SQL injection in character bazaar (`currentcharactertrades.php`) - `$_POST['auction_iden']` was directly interpolated into SQL query
+* **CRITICAL:** SQL injection in guild wars (`guildwars.php`) - `$_POST['war_acpt']` and `$_POST['war_rej']` were concatenated into UPDATE queries without sanitization
+* **CRITICAL:** SQL injection in bugtracker admin panel (`bugtracker.php`) - `$_REQUEST['acc']`, `$_REQUEST['id']`, and `$_POST['status']` were used raw in multiple SELECT and UPDATE queries
+* **HIGH:** Unsafe `addslashes()` usage in bugtracker (`bugtracker.php`) - replaced with proper `(int)` casting for numeric parameters
+* **HIGH:** Unsafe `addslashes()` usage in polls (`polls.php`) - `$_REQUEST['id']` and `$_POST['answer']` were sanitized with `addslashes()` which is vulnerable to multibyte character bypass attacks
+* **MEDIUM:** Unsanitized `$orderBy` parameter in `functions.php` - added whitelist validation for `getPlayerByAccountId()` and `getPlayerNameByAccount()` functions
+* SQL injection in polls answer voting (`polls.php`) - `$_REQUEST['id']` and `$_POST['answer']` were directly concatenated into UPDATE queries
+
+### Security
+* All numeric SQL parameters now use `(int)` casting to prevent SQL injection
+* Added column name whitelist for ORDER BY clauses to prevent ORDER BY injection
+* Removed `addslashes()` usage for SQL escaping (not safe for SQL context)
+
 ## [0.8.16 - 14.02.2024]
 
 ### Fixed
