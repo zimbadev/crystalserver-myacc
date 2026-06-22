@@ -1662,6 +1662,10 @@ function loadStagesData($configFile)
 function getPlayerByAccountId($accountId, $orderBy = 'id')
 {
   global $db;
+  $allowedColumns = ['id', 'lastlogin', 'name'];
+  if (!in_array($orderBy, $allowedColumns, true)) {
+    $orderBy = 'id';
+  }
   if (is_numeric($accountId)) {
     $players = [];
     $playersQuery = $db
@@ -1684,6 +1688,10 @@ function getPlayerByAccountId($accountId, $orderBy = 'id')
 function getPlayerNameByAccount($id, $name = null, $only = true, $orderBy = 'id')
 {
   global $db;
+  $allowedColumns = ['id', 'lastlogin', 'name'];
+  if (!in_array($orderBy, $allowedColumns, true)) {
+    $orderBy = 'id';
+  }
   if (is_numeric($id)) {
     $player = new OTS_Player();
     $player->load($id);

@@ -197,7 +197,7 @@ if (!$getPageDetails) {
                                     //Exibe apenas a auction com o personagem alvo da bid
                                     $subtopic = 'currentcharactertrades';
                                     $dateLimit = date('Y-m-d H:i:s');
-                                    $auctions = $db->query("SELECT `id`, `account_old`, `account_new`, `player_id`, `price`, `date_end`, `date_start`, `bid_account`, `bid_price`, `status` FROM `myaac_charbazaar` WHERE `id` = {$_POST['auction_iden']}");
+                                    $auctions = $db->query("SELECT `id`, `account_old`, `account_new`, `player_id`, `price`, `date_end`, `date_start`, `bid_account`, `bid_price`, `status` FROM `myaac_charbazaar` WHERE `id` = " . (int) $_POST['auction_iden']);
                                     $auctions = $auctions->fetchAll(); //Garante que continuará sendo array
                                     require SYSTEM . 'pages/char_bazaar/list_auctions.php';
                                     

@@ -258,10 +258,10 @@ $showed=true;
                         {
                             if(isset($_POST['continue']))
                             {
-                                $vote = addslashes(htmlspecialchars(trim($_REQUEST['id'])));
+                                $vote = (int) $_REQUEST['id'];
                                 $account_logged->setCustomField("vote", $vote);
-                                $UPDATE_poll = $db->query('UPDATE `myaac_polls` SET `votes_all` = `votes_all` + 1 where `id` = '.addslashes(htmlspecialchars(trim($_REQUEST['id']))).'');
-                                $UPDATE_answer = $db->query('UPDATE `myaac_polls_answers` SET `votes` = `votes` + 1 where `answer_id` = '.addslashes(htmlspecialchars($_POST['answer'])).' and`poll_id` = '.addslashes(htmlspecialchars(trim($_REQUEST['id']))).'');
+                                $UPDATE_poll = $db->query('UPDATE `myaac_polls` SET `votes_all` = `votes_all` + 1 where `id` = '.(int) $_REQUEST['id']);
+                                $UPDATE_answer = $db->query('UPDATE `myaac_polls_answers` SET `votes` = `votes` + 1 where `answer_id` = '.(int) $_POST['answer'].' and `poll_id` = '.(int) $_REQUEST['id']);
                                 header('Location: ?subtopic='.$link.'&id='.$_REQUEST['id'].'');
                             }
                         }
@@ -276,7 +276,7 @@ $showed=true;
                         echo '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['vdarkborder'].'><TD COLSPAN=2 class=white><B>Vote</B></TD></TR>';
                         echo '<TR BGCOLOR="'.$dark.'"><td COLSPAN=2><b>'.$POLL['question'].'</b><br/>' . $POLL['description'] . '</td></tr>
                         <form action="?subtopic='.$link.'&id='.$_REQUEST['id'].'&vote=true" method="POST"> ';
-                        $ANSWERS_input = $db->query('SELECT * FROM '.$db->tableName('myaac_polls_answers').' where `poll_id` = '.$_REQUEST['id'].' order by `answer_id`');
+                        $ANSWERS_input = $db->query('SELECT * FROM '.$db->tableName('myaac_polls_answers').' where `poll_id` = '.(int) $_REQUEST['id'].' order by `answer_id`');
                         $i=1;
                         foreach($ANSWERS_input as $answer)
                         {
