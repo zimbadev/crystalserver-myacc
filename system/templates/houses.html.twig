@@ -149,6 +149,19 @@
                                             <label for="type_guildhalls"> guildhalls</label><br>
                                         </td>
                                     </tr>
+
+                                    {% if houseHasWorld and worlds is defined and worlds|length > 1 %}
+                                    <tr bgcolor="{{ config.darkborder }}">
+                                        <td valign="top"><b>World</b><br>
+                                            <select name="world">
+                                                <option value="">All Worlds</option>
+                                                {% for w in worlds %}
+                                                    <option value="{{ w.name }}"{% if world is defined and world and world.id == w.id %} selected{% endif %}>{{ w.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
                                 </tbody>
                             </table>
                             <br>

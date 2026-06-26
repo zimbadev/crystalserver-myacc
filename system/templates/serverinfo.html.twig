@@ -20,8 +20,9 @@
   }, 1000);
 </script>
 
+{% include 'world.select.html.twig' %}
 <div style="text-align:center">
-  <h1>{{ config.lua.serverName }}</h1>
+  <h1>{{ (world.name ?? config.lua.serverName) }}</h1>
 </div>
 <div class="SmallBox">
   <div class="MessageContainer">
@@ -135,7 +136,7 @@
                                 <td><b>Global save: </b> {{ serverSave.0 }}:{{ serverSave.1 }}</td>
                               </tr>
                               <tr bgcolor="#D4C0A1">
-                                <td><b>World type:</b> {{ config.lua.worldType|upper }}</td>
+                                <td><b>World type:</b> {{ (world.type is defined and world.type) ? getWorldType(world.type) : config.lua.worldType|upper }}</td>
                               </tr>
                               <tr bgcolor="#F1E0C6">
                                 <td><b>Protection level: </b> {{ protectionLevel }}</td>

@@ -11,6 +11,18 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Houses';
 
+// multiworld: optional world filter (only if the houses table is world aware)
+$worlds = $db->query("SELECT * FROM `worlds` ORDER BY `id` ASC")->fetchAll(PDO::FETCH_ASSOC);
+$selectedWorld = null;
+if ($wparam = $_POST['world'] ?? $_GET['world'] ?? null) {
+    $wparam = urldecode($wparam);
+    foreach ($worlds as $w) {
+        if ($w['name'] === $wparam || (string)$w['id'] === (string)$wparam) { $selectedWorld = $w; break; }
+    }
+}
+$houseHasWorld = $db->hasColumn('houses', 'world_id');
+$w_sql = ($selectedWorld && $houseHasWorld) ? ' AND `houses`.`world_id` = ' . (int)$selectedWorld['id'] . ' ' : '';
+
 $errors = array();
 if(!$db->hasColumn('houses', 'name')) {
     $errors[] = 'Houses list is not available on this server.';
@@ -157,7 +169,7 @@ if(isset($_POST['town']) && isset($_POST['state']) && isset($_POST['order']) && 
 		}
 	}
 
-    $houses_info = $db->query('SELECT * FROM `houses` WHERE ' . $whereby. ' ORDER BY ' . $orderby);
+    $houses_info = $db->query('SELECT * FROM `houses` WHERE ' . $whereby . $w_sql . ' ORDER BY ' . $orderby);
 
     $players_info = $db->query("SELECT `houses`.`id` AS `houseid` , `players`.`name` AS `ownername` FROM `houses` , `players` , `accounts` WHERE `players`.`id` = `houses`.`owner` AND `accounts`.`id` = `players`.`account_id`");
     $players = array();
@@ -201,5 +213,8 @@ $twig->display('houses.html.twig', array(
     'guild' => $guild,
     'cleanOldHouse' => isset($cleanOld) ? $cleanOld : null,
     'housesSearch' => $housesSearch,
-    'houses' => isset($houses) ? $houses : null
+    'houses' => isset($houses) ? $houses : null,
+    'worlds' => $worlds,
+    'world' => $selectedWorld,
+    'houseHasWorld' => $houseHasWorld
 ));
