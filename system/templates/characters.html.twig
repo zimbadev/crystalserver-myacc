@@ -95,6 +95,14 @@
                             <td>{{ achievementPoints }}</td>
                           </tr>
 
+                          {% if world %}
+                          {% set rows = rows + 1 %}
+                          <tr bgcolor="{{ getStyle(rows) }}">
+                            <td class="LabelV175">World:</td>
+                            <td>{{ world }}</td>
+                          </tr>
+                          {% endif %}
+
                           {% set rows = rows + 1 %}
                           <tr bgcolor="{{ getStyle(rows) }}">
                             <td class="LabelV175">Residence:</td>

@@ -102,6 +102,10 @@ if (isset($todo) && $todo == 'save') {
     $new_guild->setName($guild_name);
     $new_guild->setOwner($player);
     $new_guild->save();
+    // multiworld: the new guild belongs to the leader's world
+    if ($db->hasColumn('guilds', 'world_id')) {
+        $new_guild->setCustomField('world_id', (int)$player->getWorldId());
+    }
     $new_guild->setCustomField('description', 'New guild. Leader must edit this text :)');
     //$new_guild->setCustomField('creationdata', time());
     $ranks = $new_guild->getGuildRanksList();

@@ -181,6 +181,7 @@ $twig->display('guilds.view.html.twig', array(
 	'guild_house' => $house_name,
     'guild_owner' => $guild_owner->isLoaded() ? $guild_owner : null,
     'guild_creation_date' => $guild->getCreationData(),
+    'guild_world' => $db->hasColumn('guilds', 'world_id') ? getWorldName((int)$guild->getCustomField('world_id')) : null,
     'guild_members' => $guild_members,
     'players_from_account_ids' => $players_from_account_ids,
     'players_from_account_in_guild' => $players_from_account_in_guild,

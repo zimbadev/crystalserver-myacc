@@ -1,6 +1,7 @@
 Please select the game world of your choice to see the list of all existing guilds on it. Click on any view button to get more information about a guild. See the manual for a detailed description about guilds and their benefits.
 <br>
 <br>
+{% if guildHasWorld is defined and guildHasWorld %}{% include 'world.select.html.twig' %}{% endif %}
 <br>
 <div class="TableContainer">
     <div class="CaptionContainer">
