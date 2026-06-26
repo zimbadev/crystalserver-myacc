@@ -124,7 +124,7 @@ class CreateCharacter
      * @throws Twig_Error_Runtime
      * @throws Twig_Error_Syntax
      */
-    public function doCreate($name, $sex, $vocation, $town, $account, &$errors)
+    public function doCreate($name, $sex, $vocation, $town, $account, &$errors, $world = null)
     {
         if (!$this->check($name, $sex, $vocation, $town, $errors)) {
             return false;
@@ -230,6 +230,10 @@ class CreateCharacter
 
         $player->save();
         $player->setCustomField('created', time());
+        // multiworld: assign the character to the chosen world
+        if ($db->hasColumn('players', 'world_id') && $world !== null) {
+            $player->setCustomField('world_id', (int)$world);
+        }
 
         $player = new OTS_Player();
         $player->find($name);
