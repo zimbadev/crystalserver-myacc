@@ -184,13 +184,12 @@ require_once SYSTEM . 'hooks.php';
 $hooks = new Hooks();
 $hooks->load();
 require_once SYSTEM . 'template.php';
+require SYSTEM . 'migrate.php';
 require_once SYSTEM . 'login.php';
 require_once SYSTEM . 'status.php';
 
 $twig->addGlobal('config', $config);
 $twig->addGlobal('status', $status);
-
-require SYSTEM . 'migrate.php';
 
 $hooks->trigger(HOOK_STARTUP);
 
