@@ -158,7 +158,7 @@ defined('MYAAC') or die('Direct access not allowed!'); ?>
                 <small> - Admin Panel</small>
                 <div class="float-end">
                     <span
-                        class="badge bg-<?= (($status['online']) ? 'success' : 'danger'); ?>"><?= $config['lua']['serverName'] ?></span>
+                        class="badge bg-<?= ((($status[1]['online'] ?? false)) ? 'success' : 'danger'); ?>"><?= $config['lua']['serverName'] ?></span>
                 </div>
             </h1>
         </section>
@@ -172,7 +172,7 @@ defined('MYAAC') or die('Direct access not allowed!'); ?>
 
         <div class="hidden-xs float-end">
             <div id="status">
-                <?php if ($status['online']): ?>
+                <?php if (($status[1]['online'] ?? false)): ?>
                     <p class="badge bg-success" style="width: 120px; text-align: center;">Server Online</p>
                 <?php else: ?>
                     <p class="badge bg-danger" style="width: 120px; text-align: center;">Server Offline</p>

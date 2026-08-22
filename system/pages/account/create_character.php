@@ -14,6 +14,17 @@ $character_sex = isset($_POST['sex']) ? (int)$_POST['sex'] : null;
 $character_vocation = isset($_POST['vocation']) ? (int)$_POST['vocation'] : null;
 $character_town = isset($_POST['town']) ? (int)$_POST['town'] : null;
 
+// multiworld: list of worlds + chosen world (validated against the worlds table)
+$worlds = $db->query("SELECT * FROM `worlds` ORDER BY `id` ASC")->fetchAll(PDO::FETCH_ASSOC);
+$character_world = isset($_POST['world']) ? (int)$_POST['world'] : null;
+$validWorld = null;
+foreach ($worlds as $w) {
+	if ((int)$w['id'] === $character_world) { $validWorld = (int)$w['id']; break; }
+}
+if ($validWorld === null && count($worlds) > 0) {
+	$validWorld = (int)$worlds[0]['id'];
+}
+
 $character_created = false;
 $save = isset($_POST['save']) && $_POST['save'] == 1;
 $errors = array();
@@ -21,7 +32,7 @@ if($save) {
 	require_once LIBS . 'CreateCharacter.php';
 	$createCharacter = new CreateCharacter();
 
-	$character_created = $createCharacter->doCreate($character_name, $character_sex, $character_vocation, $character_town, $account_logged, $errors);
+	$character_created = $createCharacter->doCreate($character_name, $character_sex, $character_vocation, $character_town, $account_logged, $errors, $validWorld);
 }
 
 if(count($errors) > 0) {
@@ -35,6 +46,8 @@ if(!$character_created) {
 		'vocation' => $character_vocation,
 		'town' => $character_town,
 		'save' => $save,
-		'errors' => $errors
+		'errors' => $errors,
+		'worlds' => $worlds,
+		'world' => $validWorld
 	));
 }

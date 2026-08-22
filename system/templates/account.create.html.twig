@@ -259,6 +259,30 @@
 												</tr>
                                                 {% endif %}
 
+												{% if worlds is defined and worlds|length > 1 %}
+												<tr>
+													<td class="LabelV" style="width: 150px">
+														<span>Select your world:</span>
+													</td>
+													<td>
+														<table width="100%">
+															<tbody>
+															<tr>
+																<td>
+																	{% for w in worlds %}
+																		<span style="margin-right:15px;" class="OptionContainer">
+																			<input type="radio" name="world" id="world{{ w.id }}" value="{{ w.id }}"{% if (world and world == w.id) or (not world and loop.first) %} checked="checked"{% endif %}>
+																			<label for="world{{ w.id }}">{{ w.name }}</label>
+																		</span>
+																	{% endfor %}
+																</td>
+															</tr>
+															</tbody>
+														</table>
+													</td>
+												</tr>
+												{% endif %}
+
 												{{ hook('HOOK_ACCOUNT_CREATE_AFTER_TOWNS') }}
 
 												</tbody>

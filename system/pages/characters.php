@@ -508,6 +508,7 @@ WHERE killers.death_id = '" . $death['id'] . "' ORDER BY killers.final_hit DESC,
         'frags_enabled' => $frags_enabled,
         'frags_count' => $frags_count,
         'town' => isset($config['towns'][$player->getTownId()]) ? $config['towns'][$player->getTownId()] : null,
+        'world' => $db->hasColumn('players', 'world_id') ? getWorldName((int)$player->getWorldId()) : null,
         'house' => array(
             'found' => isset($house['id']),
             'add' => isset($house['id']) ? $add : null,

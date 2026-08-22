@@ -76,7 +76,7 @@ else {
 					'id' => $players_deaths_count,
 					'time' => $death['date'],
 					'killers_string' => $killers_string,
-					'world_id' => isset($config['worlds'][(int)$death['world_id']]) ? $config['worlds'][(int)$death['world_id']] : null,
+					'world_id' => isset($death['world_id']) ? getWorldName((int)$death['world_id']) : null,
 				);
 			}
 		}

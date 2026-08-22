@@ -19,6 +19,12 @@ if (!$groups->count()) {
     return;
 }
 
+// multiworld: show the player's world column when there is more than one world or it is forced via config
+$showWorld = !empty($config['team_display_world']);
+if ((int)$db->query("SELECT COUNT(*) FROM `worlds`")->fetchColumn() > 1) {
+    $showWorld = true;
+}
+
 $outfit_addons = false;
 $outfit = '';
 if ($config['team_display_outfit']) {
@@ -56,7 +62,7 @@ foreach ($groupList as $id => $group) {
             'status' => $config['team_display_status'] ? $member->isOnline() : null,
             'link' => getPlayerLink($member->getName()),
             'flag_image' => $config['account_country'] ? getFlagImage($member->getAccount()->getCountry()) : null,
-            'world_name' => ($config['multiworld'] || $config['team_display_world']) ? getWorldName($member->getWorldId()) : null,
+            'world_name' => $showWorld ? getWorldName($member->getWorldId()) : null,
             'last_login' => $config['team_display_lastlogin'] ? $lastLogin : null
         );
     }

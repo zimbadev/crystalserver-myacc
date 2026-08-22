@@ -286,18 +286,17 @@ In any case the name must not violate the naming conventions stated in the <a hr
                             <tbody>
                             <tr id="world_list_tr">
                               <td style="border-style: none" align="center">
-                                <div style="width: 15em; position: relative; text-align: left;">
-                                  <input type="radio" name="world" id="server_{{ config.lua.serverName }}"
-                                         value="server_{{ config.lua.serverName }}" checked>
-                                  <label for="server_{{ config.lua.serverName }}">{{ config.lua.serverName }}</label>
-                                  <span style="position:relative;top:0px;margin-left:5px;"><a href=""
-                                                                                              target="_blank"><span
-                                        class="HelperDivIndicator"
-                                        onmouseover="ActivateHelperDiv($(this), '<b>BattlEye Protected Game World</b>', '<p>On this game world, BattlEye blocks cheats from the game. The game world has been protected by BattlEye since April 19, 2018.</p>', 'server_{{ config.lua.serverName }}_helper2');"
-                                        onmouseout="$('#HelperDivContainer').hide();"><img style="border:0px;"
-                                                                                           src="{{ template_path }}/images/global/content/icon_battleye.gif"
-                                                                                           alt="special offer"></span></a><span
-                                      id="server_{{ config.lua.serverName }}_helper2"></span></span></div>
+                                {% for w in worlds %}
+                                  <div style="width: 15em; position: relative; text-align: left;">
+                                    <input type="radio" name="world" id="server_{{ w.id }}" value="{{ w.id }}"{% if (world and world == w.id) or (not world and loop.first) %} checked{% endif %}>
+                                    <label for="server_{{ w.id }}">{{ w.name }}</label>
+                                  </div>
+                                {% else %}
+                                  <div style="width: 15em; position: relative; text-align: left;">
+                                    <input type="radio" name="world" id="server_default" value="1" checked>
+                                    <label for="server_default">{{ config.lua.serverName }}</label>
+                                  </div>
+                                {% endfor %}
                                 &nbsp;<br></td>
                             </tr>
                             </tbody>

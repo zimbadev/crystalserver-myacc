@@ -1,3 +1,4 @@
+{% include 'world.select.html.twig' %}
 <table border="0" width="100%">
 	<tbody>
 	<tr>
@@ -23,7 +24,7 @@
 									<tbody>
 									{% if not status.online %}
 										<tr style="text-align: center">
-											<td>{{ config.lua.serverName }} Server is offline.</td>
+											<td>{{ (world.name ?? config.lua.serverName) }} Server is offline.</td>
 										</tr>
 									{% else %}
 										<tr>
@@ -165,7 +166,7 @@
 													<tbody>
 													{% if players|length == 0 %}
 													<tr style="text-align: center">
-														<td>Currently no one is playing on {{ config.lua.serverName }}.</td>
+														<td>Currently no one is playing on {{ (world.name ?? config.lua.serverName) }}.</td>
 													</tr>
 													{% else %}
 													<tr bgcolor="#D4C0A1">

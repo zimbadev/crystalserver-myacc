@@ -80,12 +80,10 @@ $config = array(
 	'database_persistent' => false, // use database permanent connection (like server), may speed up your site
 	'database_encryption' => 'sha1',
 
-	// multiworld system (only TFS 0.3)
-	'multiworld' => false, // use multiworld system?
-	'worlds' => array( // list of worlds
-		//'1' => 'Your World Name',
-		//'2' => 'Your Second World Name'
-	),
+	// multiworld system: worlds are now read from the `worlds` database table (see system/pages/worlds.php)
+
+	// show the world/vocation filter selectors on listing pages (online, highscores, etc.)
+	'show_filters' => true,
 
 	// images
 	'outfit_images_url' => './outfit/animoutfit.php', // set to animoutfit.php for animated outfit

@@ -351,7 +351,7 @@
 										        <br>
                             <small>
                               <span
-                                id="CharacterNameOf_0">{{ config.vocations[player.getVocation()] }} - Level {{ player.getLevel() }} - On {{ config['lua']['serverName'] }}
+                                id="CharacterNameOf_0">{{ config.vocations[player.getVocation()] }} - Level {{ player.getLevel() }} - On {% if worlds is defined and worlds|length > 1 %}{{ getWorldName(player.getWorldId()) }}{% else %}{{ config['lua']['serverName'] }}{% endif %}
                               <span style="position: relative; top: 3px; margin-left: 5px;">
                                 <span class="HelperDivIndicator"
                                       onmouseover="ActivateHelperDiv($(this), 'BattlEye Protected Game World', '<p>This character lives on a game world which has been protected by BattleEye since April 19, 2018.</p>', '');"

@@ -1,4 +1,4 @@
-<?php
+<?php global $status;
 define('MYAAC_ADMIN', true);
 
 require '../../common.php';
@@ -7,16 +7,19 @@ require SYSTEM . 'functions.php';
 require SYSTEM . 'status.php';
 require SYSTEM . 'login.php';
 
+$worldId = $_GET['world'] ?? 1;
+$_status = $status[$worldId] ?? reset($status);
+
 if (!admin())
     die('Access denied.');
 
-if (!$status['online'])
+if (!$_status['online'])
     die('Offline');
 ?>
-<b>Server</b>: <?= $status['server'] . ' ' . $status['serverVersion']; ?><br/>
-<b>Version</b>: <?= $status['clientVersion']; ?><br/><br/>
-<b>Monsters</b>: <?= $status['monsters']; ?><br/>
-<b>Map</b>: <?= $status['mapName']; ?>, <b>author</b>: <?= $status['mapAuthor']; ?>,
-<b>size</b>: <?= $status['mapWidth'] . ' x ' . $status['mapHeight']; ?><br/>
-<b>MOTD</b>: <?= $status['motd']; ?><br/><br/>
-<b>Last check</b>: <?= date("H:i:s", $status['lastCheck']); ?>
+<b>Server</b>: <?= $_status['server'] . ' ' . $_status['serverVersion']; ?><br/>
+<b>Version</b>: <?= $_status['clientVersion']; ?><br/><br/>
+<b>Monsters</b>: <?= $_status['monsters']; ?><br/>
+<b>Map</b>: <?= $_status['mapName']; ?>, <b>author</b>: <?= $_status['mapAuthor']; ?>,
+<b>size</b>: <?= $_status['mapWidth'] . ' x ' . $_status['mapHeight']; ?><br/>
+<b>MOTD</b>: <?= $_status['motd']; ?><br/><br/>
+<b>Last check</b>: <?= date("H:i:s", $_status['lastCheck']); ?>

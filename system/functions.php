@@ -354,13 +354,15 @@ function getForumBoards()
  * @param string &$value Reference where requested data will be set to.
  * @return bool False if value was not found in table, otherwise true.
  */
-function fetchDatabaseConfig($name, &$value)
+function fetchDatabaseConfig($name, &$value, $worldId = null)
 {
   global $db;
 
-  $query = $db->query(
-    'SELECT `value` FROM `' . TABLE_PREFIX . 'config` WHERE `name` = ' . $db->quote($name)
-  );
+  $sql = 'SELECT `value` FROM `' . TABLE_PREFIX . 'config` WHERE `name` = ' . $db->quote($name);
+  if ($worldId !== null) {
+    $sql .= ' AND `world_id` = ' . (int)$worldId;
+  }
+  $query = $db->query($sql);
   if ($query->rowCount() <= 0) {
     return false;
   }
@@ -388,10 +390,14 @@ function getDatabaseConfig($name)
  * @param string $name Key name.
  * @param string $value Data to be associated with key.
  */
-function registerDatabaseConfig($name, $value)
+function registerDatabaseConfig($name, $value, $worldId = null)
 {
   global $db;
-  $db->insert(TABLE_PREFIX . 'config', ['name' => $name, 'value' => $value]);
+  $data = ['name' => $name, 'value' => $value];
+  if ($worldId !== null) {
+    $data['world_id'] = (int)$worldId;
+  }
+  $db->insert(TABLE_PREFIX . 'config', $data);
 }
 
 /**
@@ -400,10 +406,14 @@ function registerDatabaseConfig($name, $value)
  * @param string $name Key name.
  * @param string $value New data.
  */
-function updateDatabaseConfig($name, $value)
+function updateDatabaseConfig($name, $value, $worldId = null)
 {
   global $db;
-  $db->update(TABLE_PREFIX . 'config', ['value' => $value], ['name' => $name]);
+  $where = ['name' => $name];
+  if ($worldId !== null) {
+    $where['world_id'] = (int)$worldId;
+  }
+  $db->update(TABLE_PREFIX . 'config', ['value' => $value], $where);
 }
 
 /**
@@ -1002,14 +1012,81 @@ function get_plugins()
   return $ret;
 }
 
-function getWorldName($id)
+/**
+ * Returning world name by ID (multiworld system).
+ *
+ * @param int $id
+ * @return string
+ */
+function getWorldName($id): string
 {
-  global $config;
-  if (isset($config['worlds'][$id])) {
-    return $config['worlds'][$id];
+  global $db;
+  if ($db->hasTable('worlds')) {
+    if ($world = $db->query("SELECT `name` FROM `worlds` WHERE `id` = " . (int)$id)->fetch(PDO::FETCH_ASSOC)) {
+      return $world['name'];
+    }
   }
 
-  return $config['lua']['serverName'];
+  return configLua('serverName');
+}
+
+/**
+ * Returning a human readable world type (multiworld system).
+ *
+ * @param string $type
+ * @return string
+ */
+function getWorldType(string $type): string
+{
+  switch ($type) {
+    case 'pvp':
+      return 'Open PvP';
+    case 'no-pvp':
+      return 'Optional PvP';
+    case 'pvp-enforced':
+      return 'Hardcore PvP';
+    case 'retro-pvp':
+      return 'Retro Open PvP';
+    case 'retro-pvp-enforced':
+      return 'Retro Hardcore PvP';
+    default:
+      return $type;
+  }
+}
+
+/**
+ * Builds and (optionally) executes an INSERT query from an associative array of fields.
+ * String values are auto-quoted unless they are already quoted literals.
+ *
+ * @param string $tableName
+ * @param array $fields
+ * @param bool $exec
+ * @return string|void
+ */
+function generateQueryBuild(string $tableName, array $fields = [], bool $exec = true)
+{
+  global $db;
+
+  $columns = implode(', ', array_keys($fields));
+  $values = implode(', ', array_map(function ($value) use ($db) {
+    if (is_string($value)) {
+      return preg_match('/^\'[^\']*\'$/', $value) || preg_match('/^"[^"]*"$/', $value)
+        ? $value
+        : $db->quote($value);
+    }
+    return $value;
+  }, array_values($fields)));
+
+  $sql = "INSERT INTO `$tableName` ($columns) VALUES ($values)";
+  if (!$exec) {
+    return $sql;
+  }
+
+  try {
+    $db->exec($sql);
+  } catch (Exception $e) {
+    log_append('query_build.log', "Error on query: ['$sql'] -> {$e->getMessage()}");
+  }
 }
 
 /**

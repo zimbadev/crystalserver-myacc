@@ -187,6 +187,12 @@ if ($save) {
         $character_sex = isset($_POST['sex']) ? (int)$_POST['sex'] : null;
         $character_vocation = isset($_POST['vocation']) ? (int)$_POST['vocation'] : null;
         $character_town = isset($_POST['town']) ? (int)$_POST['town'] : null;
+        // multiworld: validate chosen world against the worlds table
+        $character_world = isset($_POST['world']) ? (int)$_POST['world'] : null;
+        $createAccountWorlds = $db->query("SELECT `id` FROM `worlds` ORDER BY `id` ASC")->fetchAll(PDO::FETCH_COLUMN);
+        if (!in_array($character_world, array_map('intval', $createAccountWorlds), true)) {
+            $character_world = count($createAccountWorlds) > 0 ? (int)$createAccountWorlds[0] : null;
+        }
         $createCharacter->check($character_name, $character_sex, $character_vocation, $character_town, $errors);
     }
 
@@ -260,7 +266,7 @@ if ($save) {
         } else {
             if (config('account_create_character_create')) {
                 // character creation
-                $character_created = $createCharacter->doCreate($character_name, $character_sex, $character_vocation, $character_town, $new_account, $errors);
+                $character_created = $createCharacter->doCreate($character_name, $character_sex, $character_vocation, $character_town, $new_account, $errors, $character_world ?? null);
                 if (!$character_created) {
                     error('There was an error creating your character. Please create your character later in account management page.');
                     error(implode(' ', $errors));
@@ -352,7 +358,9 @@ $params = array(
     'country_recognized' => $country_recognized,
     'country' => $country ?? null,
     'errors' => $errors,
-    'save' => $save
+    'save' => $save,
+    'worlds' => $db->query("SELECT * FROM `worlds` ORDER BY `id` ASC")->fetchAll(PDO::FETCH_ASSOC),
+    'world' => $character_world ?? null
 );
 
 if ($save && config('account_create_character_create')) {

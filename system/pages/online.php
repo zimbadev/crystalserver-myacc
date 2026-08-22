@@ -10,6 +10,20 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Who is online?';
 
+// multiworld: resolve selected world (defaults to the first world)
+$worlds = $db->query("SELECT * FROM `worlds` ORDER BY `id` ASC")->fetchAll(PDO::FETCH_ASSOC);
+$selectedWorld = null;
+if ($wname = $_POST['world'] ?? $_GET['world'] ?? null) {
+	$wname = urldecode($wname);
+	foreach ($worlds as $w) {
+		if ($w['name'] === $wname) { $selectedWorld = $w; break; }
+	}
+}
+if (!$selectedWorld && count($worlds) > 0) {
+	$selectedWorld = $worlds[0];
+}
+$w_sql = $selectedWorld ? ' AND `players`.`world_id` = ' . (int)$selectedWorld['id'] . ' ' : '';
+
 if($config['account_country'])
 	require SYSTEM . 'countries.conf.php';
 
@@ -52,9 +66,9 @@ if($config['online_vocations']) {
 }
 
 if($db->hasTable('players_online')) // tfs 1.0
-	$playersOnline = $db->query('SELECT `accounts`.`country`, `players`.`name`, `players`.`level`, `players`.`vocation`' . $outfit . ', `' . $skull_time . '` as `skulltime`, `' . $skull_type . '` as `skull` FROM `accounts`, `players`, `players_online` WHERE `players`.`id` = `players_online`.`player_id` AND `accounts`.`id` = `players`.`account_id`  ORDER BY ' . $order);
+	$playersOnline = $db->query('SELECT `accounts`.`country`, `players`.`name`, `players`.`level`, `players`.`vocation`' . $outfit . ', `' . $skull_time . '` as `skulltime`, `' . $skull_type . '` as `skull` FROM `accounts`, `players`, `players_online` WHERE `players`.`id` = `players_online`.`player_id` AND `accounts`.`id` = `players`.`account_id` ' . $w_sql . ' ORDER BY ' . $order);
 else
-	$playersOnline = $db->query('SELECT `accounts`.`country`, `players`.`name`, `players`.`level`, `players`.`vocation`' . $outfit . ', ' . $promotion . ' `' . $skull_time . '` as `skulltime`, `' . $skull_type . '` as `skull` FROM `accounts`, `players` WHERE `players`.`online` > 0 AND `accounts`.`id` = `players`.`account_id`  ORDER BY ' . $order);
+	$playersOnline = $db->query('SELECT `accounts`.`country`, `players`.`name`, `players`.`level`, `players`.`vocation`' . $outfit . ', ' . $promotion . ' `' . $skull_time . '` as `skulltime`, `' . $skull_type . '` as `skull` FROM `accounts`, `players` WHERE `players`.`online` > 0 AND `accounts`.`id` = `players`.`account_id` ' . $w_sql . ' ORDER BY ' . $order);
 
 $players_data = array();
 $explodeFlags = array();
@@ -124,7 +138,7 @@ if($config['online_record']){
 	if($db->hasTable('server_record')) {
 		$query =
 			$db->query(
-				'SELECT `record`, `timestamp` FROM `server_record` WHERE `world_id` = ' . (int)$config['lua']['worldId'] .
+				'SELECT `record`, `timestamp` FROM `server_record` WHERE `world_id` = ' . ($selectedWorld ? (int)$selectedWorld['id'] : (int)($config['lua']['worldId'] ?? 1)) .
 				' ORDER BY `record` DESC LIMIT 1');
 		$timestamp = true;
 	}else if($db->hasTable('server_config')) { // tfs 1.0
@@ -145,7 +159,10 @@ $twig->display('online.html.twig', array(
 	'current_date' => date('d/m/Y'),
 	'vocs' => isset($vocs) ? $vocs : [],
     'voc_online_count' => $voc_online_count,  // We pass the counters to the template
+	'world' => $selectedWorld,
+	'worlds' => $worlds,
+	'status' => $selectedWorld ? ($status[$selectedWorld['id']] ?? []) : [],
 ));
 
 //search bar
-$twig->display('online.form.html.twig');
+$twig->display('character.search.form.html.twig');

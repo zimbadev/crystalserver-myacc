@@ -64,7 +64,7 @@
                           href="{{ getPlayerLink(guildOwnerName, false) }}"><b>{{ guildOwnerName }}</b></a> is guild leader of {{ guild_name }}.
                           <br>
                         {% endif %}
-                        <i class="far fa-calendar-star"></i> The guild was founded on {{ config.lua.serverName }}
+                        <i class="far fa-calendar-star"></i> The guild was founded on {{ (guild_world ?? config.lua.serverName) }}
                         on {{ guild_creation_date|date("j F Y") }}.<br>
                         <b><i class="far fa-sack-dollar"></i> Guild Bank Account Balance: {{ guild_balance }}
                           Gold</b><br>

@@ -11,6 +11,20 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Server Info';
 
+// multiworld: resolve selected world (defaults to the first world) for the status block
+$worlds = $db->query("SELECT * FROM `worlds` ORDER BY `id` ASC")->fetchAll(PDO::FETCH_ASSOC);
+$selectedWorld = null;
+if ($wparam = $_POST['world'] ?? $_GET['world'] ?? null) {
+    $wparam = urldecode($wparam);
+    foreach ($worlds as $w) {
+        if ($w['name'] === $wparam || (string)$w['id'] === (string)$wparam) { $selectedWorld = $w; break; }
+    }
+}
+if (!$selectedWorld && count($worlds) > 0) {
+    $selectedWorld = $worlds[0];
+}
+$worldStatus = $selectedWorld ? ($status[$selectedWorld['id']] ?? []) : [];
+
 $rent = trim(strtolower(configLua('houseRentPeriod')));
 if ($rent != 'yearly' && $rent != 'monthly' && $rent != 'weekly' && $rent != 'daily')
     $rent = 'never';
@@ -48,8 +62,11 @@ $twig->display('serverinfo.html.twig', [
     'serverSaveTime' => $serverSaveTime->format('Y, n-1, j, G, i, s'),
     'rateUseStages' => $rateUseStages = getBoolean(configLua('rateUseStages')),
     'rateStages' => $rateUseStages && isset($config['lua']['rateStages']) ? $config['lua']['rateStages'] : [],
-    'serverIp' => str_replace(['http://', 'https://', '/'], '', configLua('url')),
-    'clientVersion' => $status['clientVersion'] ?? null,
+    'serverIp' => $selectedWorld['ip'] ?? str_replace(['http://', 'https://', '/'], '', configLua('url')),
+    'clientVersion' => $worldStatus['clientVersion'] ?? null,
+    'status' => $worldStatus,
+    'world' => $selectedWorld,
+    'worlds' => $worlds,
     'protectionLevel' => configLua('protectionLevel'),
     'houseRent' => $rent == 'never' ? 'disabled' : $rent,
     'houseOld' => $cleanOld ?? null, // in progressing

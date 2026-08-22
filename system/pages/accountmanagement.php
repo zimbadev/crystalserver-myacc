@@ -158,6 +158,7 @@ if ($action == '') {
         'actions' => $actions,
         'players' => $account_players,
         'account_update_info_on_register' => $config['account_update_info_on_register'],
+        'worlds' => $db->hasColumn('players', 'world_id') ? $db->query("SELECT * FROM `worlds` ORDER BY `id` ASC")->fetchAll(PDO::FETCH_ASSOC) : [],
     ));
 } else {
     if (!ctype_alnum(str_replace(array('-', '_'), '', $action))) {
