@@ -64,7 +64,7 @@ class PagSeguroHttpConnection
         return $this->curlConnection('GET', $url, $timeout, $charset, null);
     }
 
-    private function curlConnection($method, $url, $timeout, $charset, array $data = null)
+    private function curlConnection($method, $url, $timeout, $charset, ?array $data = null)
     {
 
         if (strtoupper($method) === 'POST') {

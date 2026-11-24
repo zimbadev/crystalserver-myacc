@@ -26,7 +26,7 @@ class PagSeguroParameter
 
     private $items;
 
-    public function __construct(array $items = null)
+    public function __construct(?array $items = null)
     {
         if (!is_null($items) && count($items) > 0) {
             $this->setItems($items);

@@ -443,7 +443,7 @@ class Environment
      * @throws LoaderError When the template cannot be found
      * @throws SyntaxError When an error occurred during compilation
      */
-    public function createTemplate($template, string $name = null)
+    public function createTemplate($template, ?string $name = null)
     {
         $hash = hash(\PHP_VERSION_ID < 80100 ? 'sha256' : 'xxh128', $template, false);
         if (null !== $name) {
