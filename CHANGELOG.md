@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.8.31 - 24.11.2026]
+
+### Added
+* Multi-world support:
+  * world-aware status, online, highscores, houses, records, serverinfo, last kills, team, guilds and character profile pages
+  * new Worlds overview/detail page (`worlds`) with per-world online players and character search
+  * world selector component used across the site
+  * world selection on account and character creation, validated against the `worlds` table
+  * client JSON login now sends the world list and each character's real `world_id`
+* `getWorldName()` and `getWorldType()` helpers, plus world-scoped `DatabaseConfig` helpers and Twig functions
+* migration 36: `world_id` on `myaac_config`, unique `(name, world_id)` index, `worlds` foreign key and the "Worlds" menu entry
+
+### Fixed
+* Twig templates failing to compile on PHP 8.4+ with `syntax error, unexpected token "{"` - anonymous functions are named `{closure:file:line}` since PHP 8.4, which the bundled Twig did not recognize
+* PHP 8.4+ deprecation warnings for implicitly nullable parameters (`Type $param = null`), now declared as `?Type $param = null` across the bundled libraries (Twig, POT, Parsedown, PagSeguro)
+* Admin Logs Viewer warnings when `system/logs/` does not exist - the directory is now created on demand and its `index.html` is shipped with the release
+* Account creation now falls back gracefully when the `worlds` table is not available
+
 ## [0.8.30 - 22.06.2026]
 
 ### Fixed
