@@ -131,7 +131,7 @@ class OTS_FileLoader
  * 
  * @param IOTS_FileCache $cache Cache handler (leave this parameter if you want to unset caching).
  */
-    public function setCacheDriver(IOTS_FileCache $cache = null)
+    public function setCacheDriver(?IOTS_FileCache $cache = null)
     {
         $this->cache = $cache;
     }

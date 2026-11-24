@@ -39,7 +39,7 @@ use Twig\TemplateWrapper;
  *
  * @return TemplateWrapper
  */
-function twig_template_from_string(Environment $env, $template, string $name = null)
+function twig_template_from_string(Environment $env, $template, ?string $name = null)
 {
     return $env->createTemplate((string) $template, $name);
 }

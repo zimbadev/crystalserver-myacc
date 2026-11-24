@@ -44,7 +44,7 @@ class PagSeguroServiceException extends Exception
      * @param PagSeguroHttpStatus $httpStatus
      * @param array $errors
      */
-    public function __construct(PagSeguroHttpStatus $httpStatus, array $errors = null)
+    public function __construct(PagSeguroHttpStatus $httpStatus, ?array $errors = null)
     {
         $this->httpStatus = $httpStatus;
         if ($errors) {
