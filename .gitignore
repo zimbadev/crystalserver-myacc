@@ -27,9 +27,9 @@ config.local.php
 cache/serverstatus.txt
 cache/usercounter.tx
 downloads/*
-logs/
-logs
-!logs/index.html
+/logs/
+/logs
+!/logs/index.html
 
 # all custom templates
 templates/*
@@ -64,7 +64,6 @@ system/php_sessions/*
 # logs
 system/logs/*
 !system/logs/index.html
-logs/
 
 # data
 system/data/*

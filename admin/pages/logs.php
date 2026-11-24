@@ -11,38 +11,53 @@ $title = 'Logs Viewer';
 
 $files = array();
 $aac_path_logs = BASE . 'system/logs/';
-foreach (scandir($aac_path_logs, SCANDIR_SORT_ASCENDING) as $f) {
-    if ($f[0] === '.' || is_dir($aac_path_logs . $f)) {
-	    continue;
-    }
-
-    $files[] = array($f, $aac_path_logs);
+if (!is_dir($aac_path_logs)) {
+    @mkdir($aac_path_logs, 0777, true);
 }
 
-$server_path_logs = $config['server_path'] . 'logs/';
-if (!file_exists($server_path_logs)) {
-    $server_path_logs = $config['data_path'] . 'logs/';
-}
-
-if (file_exists($server_path_logs)) {
-    foreach (scandir($server_path_logs, SCANDIR_SORT_ASCENDING) as $f) {
-        if ($f[0] === '.') {
-	        continue;
-        }
-
-        if (is_dir($server_path_logs . $f)) {
-            foreach (scandir($server_path_logs . $f, SCANDIR_SORT_ASCENDING) as $f2) {
-                if ($f2[0] === '.') {
-	                continue;
-                }
-
-                $files[] = array($f . '/' . $f2, $server_path_logs);
-            }
-
+$logs = is_dir($aac_path_logs) ? scandir($aac_path_logs, SCANDIR_SORT_ASCENDING) : false;
+if ($logs !== false) {
+    foreach ($logs as $f) {
+        if ($f[0] === '.' || $f === 'index.html' || is_dir($aac_path_logs . $f)) {
             continue;
         }
 
-        $files[] = array($f, $server_path_logs);
+        $files[] = array($f, $aac_path_logs);
+    }
+}
+
+$server_path_logs = $config['server_path'] . 'logs/';
+if (!is_dir($server_path_logs)) {
+    $server_path_logs = $config['data_path'] . 'logs/';
+}
+
+if (is_dir($server_path_logs)) {
+    $server_logs = scandir($server_path_logs, SCANDIR_SORT_ASCENDING);
+    if ($server_logs !== false) {
+        foreach ($server_logs as $f) {
+            if ($f[0] === '.') {
+                continue;
+            }
+
+            if (is_dir($server_path_logs . $f)) {
+                $server_sub_logs = scandir($server_path_logs . $f, SCANDIR_SORT_ASCENDING);
+                if ($server_sub_logs === false) {
+                    continue;
+                }
+
+                foreach ($server_sub_logs as $f2) {
+                    if ($f2[0] === '.') {
+                        continue;
+                    }
+
+                    $files[] = array($f . '/' . $f2, $server_path_logs);
+                }
+
+                continue;
+            }
+
+            $files[] = array($f, $server_path_logs);
+        }
     }
 }
 
