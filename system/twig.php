@@ -24,29 +24,23 @@ if ($dev_mode) {
 }
 unset($dev_mode);
 
-$function = new TwigFunction('getStyle', function ($i) {
-  return getStyle($i);
-});
+function myaac_twig_getStyle($i) { return getStyle($i); }
+$function = new TwigFunction('getStyle', 'myaac_twig_getStyle');
 $twig->addFunction($function);
 
-$function = new TwigFunction('getLink', function ($s) {
-  return getLink($s);
-});
+function myaac_twig_getLink($s) { return getLink($s); }
+$function = new TwigFunction('getLink', 'myaac_twig_getLink');
 $twig->addFunction($function);
 
-$function = new TwigFunction('getPlayerLink', function ($s, $p) {
-  return getPlayerLink($s, $p);
-});
+function myaac_twig_getPlayerLink($s, $p) { return getPlayerLink($s, $p); }
+$function = new TwigFunction('getPlayerLink', 'myaac_twig_getPlayerLink');
 $twig->addFunction($function);
 
-$function = new TwigFunction('getGuildLink', function ($s, $p) {
-  return getGuildLink($s, $p);
-});
+function myaac_twig_getGuildLink($s, $p) { return getGuildLink($s, $p); }
+$function = new TwigFunction('getGuildLink', 'myaac_twig_getGuildLink');
 $twig->addFunction($function);
 
-$function = new TwigFunction(
-  'hook',
-  function ($context, $hook, array $params = []) {
+function myaac_twig_hook($context, $hook, array $params = []) {
     global $hooks;
 
     if (is_string($hook)) {
@@ -61,35 +55,33 @@ $function = new TwigFunction(
 
     $params['context'] = $context;
     $hooks->trigger($hook, $params);
-  },
+}
+
+$function = new TwigFunction(
+  'hook',
+  'myaac_twig_hook',
   ['needs_context' => true]
 );
 $twig->addFunction($function);
 
-$function = new TwigFunction('config', function ($key) {
-  return config($key);
-});
+function myaac_twig_config($key) { return config($key); }
+$function = new TwigFunction('config', 'myaac_twig_config');
 $twig->addFunction($function);
 
-$function = new TwigFunction('getCustomPage', function ($name) {
-  $success = false;
-  return getCustomPage($name, $success);
-});
+function myaac_twig_getCustomPage($name) { $success = false; return getCustomPage($name, $success); }
+$function = new TwigFunction('getCustomPage', 'myaac_twig_getCustomPage');
 $twig->addFunction($function);
 
-$function = new TwigFunction('getWorldType', function ($type) {
-  return getWorldType($type);
-});
+function myaac_twig_getWorldType($type) { return getWorldType($type); }
+$function = new TwigFunction('getWorldType', 'myaac_twig_getWorldType');
 $twig->addFunction($function);
 
-$function = new TwigFunction('getWorldName', function ($id) {
-  return getWorldName($id);
-});
+function myaac_twig_getWorldName($id) { return getWorldName($id); }
+$function = new TwigFunction('getWorldName', 'myaac_twig_getWorldName');
 $twig->addFunction($function);
 
-$filter = new TwigFilter('urlencode', function ($s) {
-  return urlencode($s);
-});
+function myaac_twig_urlencode($s) { return urlencode($s); }
+$filter = new TwigFilter('urlencode', 'myaac_twig_urlencode');
 
 $twig->addFilter($filter);
 unset($function, $filter);

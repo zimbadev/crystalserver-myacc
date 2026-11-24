@@ -189,7 +189,10 @@ if ($save) {
         $character_town = isset($_POST['town']) ? (int)$_POST['town'] : null;
         // multiworld: validate chosen world against the worlds table
         $character_world = isset($_POST['world']) ? (int)$_POST['world'] : null;
-        $createAccountWorlds = $db->query("SELECT `id` FROM `worlds` ORDER BY `id` ASC")->fetchAll(PDO::FETCH_COLUMN);
+        $createAccountWorlds = [];
+        if ($db->hasTable('worlds')) {
+            $createAccountWorlds = $db->query("SELECT `id` FROM `worlds` ORDER BY `id` ASC")->fetchAll(PDO::FETCH_COLUMN);
+        }
         if (!in_array($character_world, array_map('intval', $createAccountWorlds), true)) {
             $character_world = count($createAccountWorlds) > 0 ? (int)$createAccountWorlds[0] : null;
         }
@@ -350,6 +353,11 @@ if ($config['account_country']) {
 
 $twig->display('account.create.js.html.twig');
 
+$worlds = [];
+if ($db->hasTable('worlds')) {
+    $worlds = $db->query("SELECT * FROM `worlds` ORDER BY `id` ASC")->fetchAll(PDO::FETCH_ASSOC);
+}
+
 $params = array(
     'account' => $_POST['account'] ?? '',
     'email' => $_POST['email'] ?? '',
@@ -359,7 +367,7 @@ $params = array(
     'country' => $country ?? null,
     'errors' => $errors,
     'save' => $save,
-    'worlds' => $db->query("SELECT * FROM `worlds` ORDER BY `id` ASC")->fetchAll(PDO::FETCH_ASSOC),
+    'worlds' => $worlds,
     'world' => $character_world ?? null
 );
 

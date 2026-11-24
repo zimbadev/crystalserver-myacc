@@ -297,7 +297,8 @@ abstract class CallExpression extends AbstractExpression
         }
         $r = new \ReflectionFunction($closure);
 
-        if (false !== strpos($r->name, '{closure}')) {
+        // PHP 8.4+ names anonymous functions "{closure:/path/file.php:line}"
+        if (false !== strpos($r->name, '{closure')) {
             return $this->reflector = [$r, $callable, 'Closure'];
         }
 

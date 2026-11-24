@@ -9,7 +9,11 @@ $db->exec("SET FOREIGN_KEY_CHECKS=0;");
 $db->exec("ALTER TABLE `" . TABLE_PREFIX . "config` ADD `world_id` INT(3) UNSIGNED NOT NULL DEFAULT 1 AFTER `value`;");
 $db->exec("ALTER TABLE `" . TABLE_PREFIX . "config` DROP INDEX `name`;");
 $db->exec("ALTER TABLE `" . TABLE_PREFIX . "config` ADD UNIQUE `unique_name_world` (`name`, `world_id`);");
-$db->exec("ALTER TABLE `" . TABLE_PREFIX . "config` ADD FOREIGN KEY (`world_id`) REFERENCES `worlds` (`id`) ON DELETE CASCADE;");
+
+// Only add foreign key if worlds table exists (it belongs to game server)
+if ($db->hasTable('worlds')) {
+    $db->exec("ALTER TABLE `" . TABLE_PREFIX . "config` ADD FOREIGN KEY (`world_id`) REFERENCES `worlds` (`id`) ON DELETE CASCADE;");
+}
 
 // Add the "Worlds" entry right after "Characters" in the Community category (tibiacom template).
 $db->exec("UPDATE `" . TABLE_PREFIX . "menu` SET `ordering` = `ordering` + 1 WHERE `template` = 'tibiacom' AND `category` = 3 AND `ordering` >= 1;");
